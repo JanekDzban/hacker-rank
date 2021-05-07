@@ -27,16 +27,15 @@ class JumpingOnTheCloudsResult {
                 .map(Map.Entry::getKey)
                 .collect(Collectors.toList());
 
-        int jumps = 0;
-        for(int i = 0; i < safeCloudsPositions.size() - 1;) {
-            if(safeCloudsPositions.get(i) + 2 == safeCloudsPositions.get(i + 1)) {
-                i+=2;
-            } else {
-                i++;
-            }
-            jumps++;
+        for(int i = 0; i < safeCloudsPositions.size(); i++) {
+            try {
+                if(safeCloudsPositions.get(i) + 1 == safeCloudsPositions.get(i + 1) &&
+                        safeCloudsPositions.get(i + 1) + 1 == safeCloudsPositions.get(i + 2)) {
+                    safeCloudsPositions.remove(i + 1);
+                }
+            } catch(IndexOutOfBoundsException ignored) {}
         }
-        return jumps;
+        return safeCloudsPositions.size() - 1;
     }
 
 }
@@ -46,9 +45,10 @@ public class JumpingOnTheClouds {
         Map<List<Integer>, Integer> cases = new HashMap<>();
         cases.put(Arrays.asList(0,0,1,0,0,1,0), 4);
         cases.put(Arrays.asList(0,0,0,0,1,0), 3);
-        cases.forEach((in, out) -> {
-            int result = JumpingOnTheCloudsResult.jumpingOnClouds(in);
-            System.out.printf("%s %s %s%n", in, out, result);
+        cases.put(Arrays.asList(0,0,0,1,0,0), 3);
+        cases.forEach((in, exp) -> {
+            int out = JumpingOnTheCloudsResult.jumpingOnClouds(in);
+            System.out.printf("input: %s output: %s expected: %s%n", in, out, exp);
         });
     }
 }
